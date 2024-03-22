@@ -1,5 +1,8 @@
 Projekt na zajęcie z ZIWG
-Health Care App
-Julia Gościniak
-Katarzyna Hajduk
-Jakub Budziło
+
+Temat: Health Care App
+
+Skład grupy:
+ - Julia Gościniak
+ - Katarzyna Hajduk
+ - Jakub Budziło
