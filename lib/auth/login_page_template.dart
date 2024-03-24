@@ -11,6 +11,11 @@ class LoginPageTemplate extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
+          // if (MediaQuery.of(context).viewInsets.bottom == 0)
+          SvgPicture.asset(
+            'assets/Shape.svg',
+            height: size.height * 0.2,
+          ),
           SizedBox(
             width: size.width,
             child: SingleChildScrollView(
@@ -20,7 +25,7 @@ class LoginPageTemplate extends StatelessWidget {
                 children: [
                   SizedBox(
                       height: MediaQuery.of(context).viewInsets.bottom == 0
-                          ? size.height * 0.25
+                          ? size.height * 0.2
                           : 20),
                   SvgPicture.asset(
                     'assets/undraw_medicine_b-1-ol-2.svg',
@@ -28,7 +33,7 @@ class LoginPageTemplate extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   const Text(
-                    "Health Care APP",
+                    "Health Care App",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 10),
@@ -37,11 +42,6 @@ class LoginPageTemplate extends StatelessWidget {
               ),
             ),
           ),
-          if (MediaQuery.of(context).viewInsets.bottom == 0)
-            SvgPicture.asset(
-              'assets/Shape.svg',
-              height: size.height * 0.2,
-            ),
         ],
       ),
     );

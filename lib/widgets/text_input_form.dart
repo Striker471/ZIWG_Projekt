@@ -41,7 +41,7 @@ class _TextInputFormState extends State<TextInputForm> {
           TextField(
             obscureText: widget.hideText ? _obscured : false,
             controller: widget.controller,
-            cursorColor: Theme.of(context).colorScheme.primary,
+            // cursorColor: Theme.of(context).colorScheme.primary,
             decoration: InputDecoration(
               enabledBorder: boder,
               contentPadding: const EdgeInsets.symmetric(horizontal: 10),

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:health_care_app/auth/login_page.dart';
+import 'package:health_care_app/global.dart';
+import 'package:health_care_app/widgets/action_container.dart';
+import 'package:health_care_app/widgets/search_bar_container.dart';
 
 void main() {
   runApp(const MainApp());
@@ -36,13 +40,74 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  TextEditingController email = TextEditingController();
+  TextEditingController search = TextEditingController();
+
+  @override
+  void dispose() {
+    search.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("To be HomePage"),
+    Size size = MediaQuery.of(context).size;
+    return Scaffold(
+      body: Stack(
+        children: [
+          SvgPicture.asset(
+            'assets/Shape.svg',
+            height: size.height * 0.2,
+          ),
+          SizedBox(
+            width: size.width,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: size.height * 0.2),
+                  const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Welcome in Health Care App",
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.w600),
+                        ),
+                        Text(
+                          "What are you looking for?",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w600),
+                        ),
+                      ]),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: SearchBarContainer(
+                        onSubmitted: (searchString) {
+                          //FIXME: nwm po co to więc potem się będziemy zastanawiać co z tym zrobić
+                        },
+                        search: search),
+                  ),
+                  GridView.count(
+                    crossAxisCount: 2,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    childAspectRatio: 1.15,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: homePageActions.map((action) {
+                      String title = action.keys.first;
+                      return Center(
+                        child: ActionContainer(
+                          title: title,
+                          assetUrl: action[title]!,
+                        ),
+                      );
+                    }).toList(),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
