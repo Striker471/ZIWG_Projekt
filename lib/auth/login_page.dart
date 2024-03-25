@@ -30,21 +30,22 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return LoginPageTemplate(
+      showLeading: false,
       body: Column(
         children: [
           TextInputForm(
-              width: size.width * 0.9, hint: "E-mail", controller: email),
+              width: size.width * 0.9, hint: 'E-mail', controller: email),
           const SizedBox(height: 5),
           TextInputForm(
             width: size.width * 0.9,
-            hint: "Password",
+            hint: 'Password',
             controller: password,
             hideText: true,
           ),
           const SizedBox(height: 5),
           GoogleButton(
               width: size.width * 0.9,
-              title: "Continue with Google",
+              title: 'Continue with Google',
               onPressed: () {
                 // TODO: Logika za logowaniem przez GOOGLE. Jeżeli się uda to Navigator
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -57,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
-                "Don't have an account?",
+                'Don\'t have an account?',
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -66,18 +67,18 @@ class _LoginPageState extends State<LoginPage> {
               MyTextButton(
                   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const SignUpPage())),
-                  title: "Sign up",
+                  title: 'Sign up',
                   textPadding: const EdgeInsets.only(left: 3)),
             ],
           ),
           MyTextButton(
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const ForgotPassPage())),
-              title: "Forgot your password?",
+              title: 'Forgot your password?',
               textPadding: EdgeInsets.zero),
           const SizedBox(height: 10),
           SimpleButton(
-              title: "Login",
+              title: 'Login',
               textColor: Colors.black,
               onPressed: () {
                 // TODO: Logika za logowaniem. Jeżeli się uda to Navigator na MyHomePage

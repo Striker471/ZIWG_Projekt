@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_care_app/global.dart';
 
 class SearchBarContainer extends StatelessWidget {
   final TextEditingController search;
@@ -11,14 +12,7 @@ class SearchBarContainer extends StatelessWidget {
     return Container(
         width: size.width * 0.9,
         decoration: BoxDecoration(
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.grey,
-              blurRadius: 2.0,
-              spreadRadius: 0.0,
-              offset: Offset(2.0, 2.0),
-            )
-          ],
+          boxShadow: boxShadow,
           color: const Color(0xFFD9D9D9),
           borderRadius: BorderRadius.circular(20.0),
         ),
@@ -29,7 +23,7 @@ class SearchBarContainer extends StatelessWidget {
           controller: search,
           decoration: const InputDecoration(
             suffixIcon: Icon(Icons.search),
-            hintText: "Search...",
+            hintText: 'Search...',
             border: InputBorder.none,
             hintStyle: TextStyle(
                 fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),

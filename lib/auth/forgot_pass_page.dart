@@ -27,10 +27,10 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
       body: Column(
         children: [
           TextInputForm(
-              width: size.width * 0.9, hint: "E-mail", controller: email),
+              width: size.width * 0.9, hint: 'E-mail', controller: email),
           const SizedBox(height: 10),
           SimpleButton(
-              title: "Submit",
+              title: 'Submit',
               textColor: Colors.black,
               onPressed: () {
                 // TODO: Logika za zmianą hasła. Jeżeli się uda to Navigator na Login page aby się zalogować

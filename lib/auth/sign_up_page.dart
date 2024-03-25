@@ -31,24 +31,24 @@ class _SignUpPageState extends State<SignUpPage> {
       body: Column(
         children: [
           TextInputForm(
-              width: size.width * 0.9, hint: "E-mail", controller: email),
+              width: size.width * 0.9, hint: 'E-mail', controller: email),
           const SizedBox(height: 5),
           TextInputForm(
             width: size.width * 0.9,
-            hint: "Password",
+            hint: 'Password',
             controller: password,
             hideText: true,
           ),
           const SizedBox(height: 5),
           TextInputForm(
             width: size.width * 0.9,
-            hint: "Repeat password",
+            hint: 'Repeat password',
             controller: repeatPassword,
             hideText: true,
           ),
           const SizedBox(height: 10),
           SimpleButton(
-              title: "Sign up",
+              title: 'Sign up',
               textColor: Colors.black,
               onPressed: () {
                 // TODO: Logika za rejestracją. Jeżeli się uda to Navigator na Login page aby się zalogować
