@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:health_care_app/auth/login_page.dart';
 import 'package:health_care_app/global.dart';
 import 'package:health_care_app/widgets/action_container.dart';
 import 'package:health_care_app/widgets/search_bar_container.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Future.delayed(const Duration(seconds: 1));
+  await initializeDateFormatting();
   FlutterNativeSplash.remove();
   runApp(const MainApp());
 }
@@ -33,6 +36,12 @@ class MainApp extends StatelessWidget {
         fontFamily: 'Poppins',
       ),
       home: const LoginPage(),
+      supportedLocales: const [Locale('en')],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
     );
   }
 }
@@ -45,12 +54,37 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  TextEditingController search = TextEditingController();
+  TextEditingController searchController = TextEditingController();
+  List<Map<String, String>> filteredActions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredActions = homePageActions;
+    searchController.addListener(() {
+      filterActions();
+    });
+  }
 
   @override
   void dispose() {
-    search.dispose();
+    searchController.dispose();
     super.dispose();
+  }
+
+  void filterActions() {
+    String query = searchController.text.toLowerCase();
+    if (query.isEmpty) {
+      setState(() {
+        filteredActions = homePageActions;
+      });
+    } else {
+      setState(() {
+        filteredActions = homePageActions
+            .where((action) => action.keys.first.toLowerCase().contains(query))
+            .toList();
+      });
+    }
   }
 
   @override
@@ -86,28 +120,25 @@ class _MyHomePageState extends State<MyHomePage> {
                       ]),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 15),
-                    child: SearchBarContainer(
-                        onSubmitted: (searchString) {
-                          //FIXME: nwm po co to więc potem się będziemy zastanawiać co z tym zrobić
-                        },
-                        search: search),
+                    child: SearchBarContainer(search: searchController),
                   ),
                   GridView.count(
                     crossAxisCount: 2,
                     shrinkWrap: true,
                     padding: EdgeInsets.zero,
-                    childAspectRatio: 1.15,
+                    childAspectRatio: 1.1,
                     physics: const NeverScrollableScrollPhysics(),
-                    children: homePageActions.map((action) {
+                    children: filteredActions.map((action) {
                       String title = action.keys.first;
                       return Center(
                         child: ActionContainer(
-                            title: title,
-                            assetUrl: action[title]!,
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => getActionRoute(title)));
-                            }),
+                          title: title,
+                          assetUrl: action[title]!,
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => getActionRoute(title)));
+                          },
+                        ),
                       );
                     }).toList(),
                   ),

@@ -3,8 +3,7 @@ import 'package:health_care_app/global.dart';
 
 class SearchBarContainer extends StatelessWidget {
   final TextEditingController search;
-  final Function(String)? onSubmitted;
-  const SearchBarContainer({super.key, required this.search, this.onSubmitted});
+  const SearchBarContainer({super.key, required this.search});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +27,6 @@ class SearchBarContainer extends StatelessWidget {
             hintStyle: TextStyle(
                 fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
           ),
-          onSubmitted: onSubmitted,
         ));
   }
 }
