@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:health_care_app/auth/login_page_template.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:health_care_app/blank_scaffold.dart';
 import 'package:health_care_app/global.dart';
 import 'package:health_care_app/widgets/date_and_time_picker.dart';
 import 'package:health_care_app/widgets/simple_button.dart';
@@ -22,10 +23,24 @@ class _AppointmentFormState extends State<AppointmentForm> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return LoginPageTemplate(
+    return BlankScaffold(
         body: SingleChildScrollView(
       child: Column(
         children: [
+          SizedBox(
+              height: MediaQuery.of(context).viewInsets.bottom == 0
+                  ? size.height * 0.2
+                  : 20),
+          SvgPicture.asset(
+            'assets/undraw_events_re_98ue.svg',
+            height: size.height * 0.25,
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            'New Appointment Form',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

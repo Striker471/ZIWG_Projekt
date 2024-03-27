@@ -82,7 +82,7 @@ class _BuildingFinderState extends State<BuildingFinder> {
                             width: 80,
                             height: 80,
                             child: Icon(MdiIcons.circleSlice8,
-                                size: 20, color: Colors.red),
+                                size: 20, color: Colors.blue),
                           ),
                           ...widget.building
                               .map((building) => Marker(
