@@ -25,6 +25,8 @@ dependencies:
   animated_toggle_switch: ^0.6.2
   table_calendar: ^3.0.9
   intl: ^0.18.1
+  firebase_core: ^2.27.2
+  firebase_auth: ^4.18.0
 
 dev_dependencies:
   flutter_test:
