@@ -84,6 +84,7 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () async {
                 String userEmail = email.text;
                 String userPassword = password.text;
+
                 try {
                   await signIn(userEmail, userPassword);
                   Navigator.of(context).pushReplacement(MaterialPageRoute(

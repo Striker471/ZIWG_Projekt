@@ -52,8 +52,6 @@ class _SignUpPageState extends State<SignUpPage> {
               title: 'Sign up',
               textColor: Colors.black,
               onPressed: () async {
-                // TODO: Logika za rejestracją. Jeżeli się uda to Navigator na Login page aby się zalogować
-
                 String userEmail = email.text;
                 String userPassword = password.text;
                 String userRepeatPassword = repeatPassword.text;
