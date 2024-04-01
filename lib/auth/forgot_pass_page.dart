@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:health_care_app/auth/login_page.dart';
 import 'package:health_care_app/auth/login_page_template.dart';
@@ -32,11 +34,9 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
           SimpleButton(
               title: 'Submit',
               textColor: Colors.black,
-              onPressed: () {
-                // TODO: Logika za zmianą hasła. Jeżeli się uda to Navigator na Login page aby się zalogować
-
+              onPressed: () async {
                 String userEmail = email.text;
-
+                await resetPassword(userEmail);
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => const LoginPage(),
                 ));
@@ -44,5 +44,9 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
         ],
       ),
     );
+  }
+
+  Future resetPassword(String email) async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
 }

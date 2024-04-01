@@ -25,7 +25,7 @@ class BlankScaffold extends StatelessWidget {
           body,
           if (showLeading)
             Positioned(
-              top: 15,
+              top: 50,
               left: 15,
               child: IconButton(
                 icon: Ink(

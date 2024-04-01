@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:health_care_app/auth/forgot_pass_page.dart';
 import 'package:health_care_app/auth/google_button.dart';
@@ -80,18 +81,28 @@ class _LoginPageState extends State<LoginPage> {
           SimpleButton(
               title: 'Login',
               textColor: Colors.black,
-              onPressed: () {
-                // TODO: Logika za logowaniem. Jeżeli się uda to Navigator na MyHomePage
-
+              onPressed: () async {
                 String userEmail = email.text;
                 String userPassword = password.text;
 
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => const MyHomePage(),
-                ));
+                try {
+                  await signIn(userEmail, userPassword);
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const MyHomePage(),
+                  ));
+                } catch (e) {
+                  // TODO: Snackbar itp ze zostaly podane niepoprawne dane.
+                  final snackBar = SnackBar(content: Text(e.toString()));
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
               }),
         ],
       ),
     );
+  }
+
+  Future signIn(String email, String password) async {
+    await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
   }
 }

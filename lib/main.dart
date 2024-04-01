@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:health_care_app/auth/login_page.dart';
+import 'package:health_care_app/firebase_options.dart';
 import 'package:health_care_app/global.dart';
 import 'package:health_care_app/widgets/action_container.dart';
 import 'package:health_care_app/widgets/search_bar_container.dart';
@@ -10,6 +13,7 @@ import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Future.delayed(const Duration(seconds: 1));
   await initializeDateFormatting();
@@ -103,7 +107,36 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: size.height * 0.2),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(height: size.height * 0.2),
+                      IconButton(
+                        icon: const Icon(Icons.logout),
+                        onPressed: () async {
+                          try {
+                            await FirebaseAuth.instance.signOut();
+                            User? user = FirebaseAuth.instance.currentUser;
+                            if (user == null) {
+                              print('Użytkownik został poprawnie wylogowany');
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginPage()),
+                                (route) => false,
+                              );
+                            } else {
+                              print(
+                                  'Błąd: Nie udało się poprawnie wylogować użytkownika');
+                            }
+                          } catch (e) {
+                            print('Wystąpił błąd podczas wylogowywania: $e');
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: size.height * 0.05),
                   const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

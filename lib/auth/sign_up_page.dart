@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:health_care_app/auth/login_page.dart';
 import 'package:health_care_app/auth/login_page_template.dart';
@@ -50,19 +51,32 @@ class _SignUpPageState extends State<SignUpPage> {
           SimpleButton(
               title: 'Sign up',
               textColor: Colors.black,
-              onPressed: () {
-                // TODO: Logika za rejestracją. Jeżeli się uda to Navigator na Login page aby się zalogować
-
+              onPressed: () async {
                 String userEmail = email.text;
                 String userPassword = password.text;
                 String userRepeatPassword = repeatPassword.text;
 
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => const LoginPage(),
-                ));
+                try {
+                  await signUp(userEmail, userPassword, userRepeatPassword);
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ));
+                } catch (e) {
+                  // TODO: Snackbar itp ze zostaly podane niepoprawne dane.
+                  final snackBar = SnackBar(content: Text(e.toString()));
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
               }),
         ],
       ),
     );
+  }
+
+  Future signUp(String email, String password, String repeatPassword) async {
+    if (password != repeatPassword) {
+      throw Exception("The passwords are not identical");
+    }
+    await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password);
   }
 }
