@@ -97,11 +97,11 @@ class _AppointmentFormState extends State<AppointmentForm> {
                 try {
                   final format = DateFormat('yyyy-MM-dd h:mm a');
                   Appointment appointment = Appointment(
-                      appDate: format.parse(date.text),
-                      appType: doctorType.text,
-                      appName: doctorName.text,
-                      appLocation: location.text,
-                      appPurpose: purpose.text.isEmpty ? null : purpose.text);
+                      date: format.parse(date.text),
+                      doctorType: doctorType.text,
+                      doctorName: doctorName.text,
+                      location: location.text,
+                      purpose: purpose.text.isEmpty ? null : purpose.text);
                   await repository.addAppointment(appointment);
                   Navigator.of(context).pop();
                 } catch (e) {
