@@ -1,4 +1,6 @@
+import 'package:health_care_app/model/appointment.dart';
+
 abstract class Repository{
   Future<List<Appointment>> getAppointments();
-  Future<void> addAppointment(Appointment appointment);
+  Future addAppointment(Appointment appointment);
 }

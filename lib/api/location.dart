@@ -29,7 +29,7 @@ Future initializeLocation() async {
   print('Aktualna lokalizacja: ${locationData?.latitude}, ${locationData?.longitude}');
   locationData = await location.getLocation();
   print(locationData.latitude.toString());
-  print('Aktualna lokalizacja: ${locationData?.latitude}, ${locationData?.longitude}');
+  print('Aktualna lokalizacja: ${locationData.latitude}, ${locationData.longitude}');
 
 
   return locationData;
