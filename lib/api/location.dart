@@ -17,7 +17,7 @@ Future initializeLocation() async {
   }
 
   permissionGranted = await location.hasPermission();
-   print('Dostęp do lokalizacji: $permissionGranted');
+  print('Dostęp do lokalizacji: $permissionGranted');
   if (permissionGranted == PermissionStatus.denied) {
     permissionGranted = await location.requestPermission();
     print('Poprawnie zażądano dostępu do lokalizacji: $permissionGranted');
@@ -25,12 +25,10 @@ Future initializeLocation() async {
       return;
     }
   }
-  print('Aktualna lokalizacja:');
-  print('Aktualna lokalizacja: ${locationData?.latitude}, ${locationData?.longitude}');
   locationData = await location.getLocation();
   print(locationData.latitude.toString());
-  print('Aktualna lokalizacja: ${locationData.latitude}, ${locationData.longitude}');
-
+  print(
+      'Aktualna lokalizacja: ${locationData.latitude}, ${locationData.longitude}');
 
   return locationData;
 }
