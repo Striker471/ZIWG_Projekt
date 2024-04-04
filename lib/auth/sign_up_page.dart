@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:health_care_app/auth/login_page.dart';
@@ -63,7 +65,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     builder: (context) => const LoginPage(),
                   ));
                 } catch (e) {
-                  showInfo('Failed to sign up: ${e.toString()}.');
+                  displayErrorMotionToast('Failed to sign up.', context);
                 }
               }),
         ],

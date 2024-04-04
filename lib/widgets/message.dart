@@ -1,21 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:health_care_app/main.dart';
+import 'package:motion_toast/motion_toast.dart';
 
-showInfo(String text, [Color? color, double? width]) {
-  FToast fToast = FToast();
-  fToast.init(navigatorKey.currentContext!);
-  Widget box = Container(
+void displayDeleteMotionToast(String text, BuildContext context) {
+  MotionToast.delete(
+    title: const Text(
+      'Deleted',
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    description: Text(text),
+    animationType: AnimationType.fromBottom,
+    position: MotionToastPosition.bottom,
+    barrierColor: Colors.black.withOpacity(0.3),
+    width: 300,
     height: 80,
-    alignment: Alignment.center,
-    width: width ?? 300,
-    padding: const EdgeInsets.all(10),
-    decoration: BoxDecoration(
-        color: color ?? Colors.red, borderRadius: BorderRadius.circular(15)),
-    child: Text(text,
-        style:
-            const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-        textAlign: TextAlign.center),
+    dismissable: false,
+  ).show(context);
+}
+
+void displayErrorMotionToast(String text, BuildContext context) {
+  MotionToast.error(
+    title: const Text(
+      'Error',
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    description: Text(text),
+    animationType: AnimationType.fromBottom,
+    position: MotionToastPosition.bottom,
+    barrierColor: Colors.black.withOpacity(0.3),
+    width: 300,
+    height: 80,
+    dismissable: false,
+  ).show(context);
+}
+
+void displaySuccessMotionToast(String text, BuildContext context) {
+  MotionToast toast = MotionToast(
+    primaryColor: Colors.red,
+    description: Text(
+      text,
+      style: const TextStyle(fontSize: 12),
+    ),
+    animationType: AnimationType.fromBottom,
+    position: MotionToastPosition.bottom,
+    barrierColor: Colors.black.withOpacity(0.3),
+    width: 300,
+    height: 80,
+    dismissable: false,
   );
-  fToast.showToast(child: box, gravity: ToastGravity.BOTTOM);
+  toast.show(context);
 }

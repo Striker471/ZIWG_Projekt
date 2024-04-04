@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:health_care_app/blank_scaffold.dart';
@@ -91,11 +93,14 @@ class _AppointmentFormState extends State<AppointmentForm> {
               title: 'Submit',
               textColor: Colors.black,
               onPressed: () async {
-                // TODO: Logika za dodaniem nowego spotakania. Jak się uda to pop
-                // Zakładamy że purpose nie jest wymagany!
-                // !!! kilka uwag, jak chcemy przechowywac niewymagany purpose w bazie czy null czy pusty string,
-                // nalezy dodac obslugę braku wpisanych wartosci
-                // pusty string!
+                if (date.text.isEmpty &&
+                    doctorType.text.isEmpty &&
+                    doctorName.text.isEmpty &&
+                    location.text.isEmpty) {
+                  displayErrorMotionToast('Fill in all the data.', context);
+                  return;
+                }
+
                 try {
                   final format = DateFormat('yyyy-MM-dd h:mm a');
                   Appointment appointment = Appointment(
@@ -103,11 +108,12 @@ class _AppointmentFormState extends State<AppointmentForm> {
                       doctorType: doctorType.text,
                       doctorName: doctorName.text,
                       location: location.text,
-                      purpose: purpose.text.isEmpty ? null : purpose.text);
+                      purpose: purpose.text.isEmpty ? "" : purpose.text);
                   await repository.addAppointment(appointment);
                   Navigator.of(context).pop(true);
                 } catch (e) {
-                  showInfo('Failed to add appointment: ${e.toString()}.');
+                  displayErrorMotionToast(
+                      'Failed to add appointment.', context);
                 }
               }),
         ],
