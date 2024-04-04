@@ -12,6 +12,7 @@ import 'package:health_care_app/global.dart';
 import 'package:health_care_app/widgets/action_container.dart';
 import 'package:health_care_app/widgets/search_bar_container.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +21,7 @@ void main() async {
   await Future.delayed(const Duration(seconds: 1));
   await initializeDateFormatting();
   FlutterNativeSplash.remove();
+  tz.initializeTimeZones();
   runApp(const MainApp());
 }
 
@@ -120,7 +122,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             await FirebaseAuth.instance.signOut();
                             User? user = FirebaseAuth.instance.currentUser;
                             if (user == null) {
-                              print('Użytkownik został poprawnie wylogowany');
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
@@ -128,11 +129,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                 (route) => false,
                               );
                             } else {
-                              print(
-                                  'Błąd: Nie udało się poprawnie wylogować użytkownika');
+                              const snackBar = SnackBar(
+                                  content: Text(
+                                      'Błąd: Nie udało się poprawnie wylogować użytkownika'));
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
                             }
                           } catch (e) {
-                            print('Wystąpił błąd podczas wylogowywania: $e');
+                            final snackBar =
+                                SnackBar(content: Text(e.toString()));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
                           }
                         },
                       ),

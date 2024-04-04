@@ -93,7 +93,6 @@ class _LoginPageState extends State<LoginPage> {
                     builder: (context) => const MyHomePage(),
                   ));
                 } catch (e) {
-                  // TODO: Snackbar itp ze zostaly podane niepoprawne dane.
                   final snackBar = SnackBar(content: Text(e.toString()));
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 }
