@@ -1,4 +1,4 @@
-//FIXME: to be removed after firebase
+//FIXME: to be removed after shared prefferences
 List<Map<String, dynamic>> appointments = [
   {
     'date': '2024-02-15T16:45:00Z', //Date

@@ -78,6 +78,7 @@ class _MainNotificationsState extends State<MainNotifications> {
                         ],
                       );
                     }
+                    return const SizedBox.shrink();
                   },
                 )
               ],

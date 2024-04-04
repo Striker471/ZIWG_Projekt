@@ -44,7 +44,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                     builder: (context) => const LoginPage(),
                   ));
                 } catch (e) {
-                  showInfo('Failed to send email: ${e.toString()}.');
+                  displayErrorMotionToast('Failed to send email.', context);
                 }
               }),
         ],

@@ -65,7 +65,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     builder: (context) => const LoginPage(),
                   ));
                 } catch (e) {
-                  showInfo('Failed to sign up: ${e.toString()}.');
+                  displayErrorMotionToast('Failed to sign up.', context);
                 }
               }),
         ],

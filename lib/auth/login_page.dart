@@ -94,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                     builder: (context) => const MyHomePage(),
                   ));
                 } catch (e) {
-                  showInfo('Failed to log in: ${e.toString()}.');
+                  displayErrorMotionToast('Failed to log in.', context);
                 }
               }),
         ],
