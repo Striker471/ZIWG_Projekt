@@ -103,7 +103,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                       location: location.text,
                       purpose: purpose.text.isEmpty ? null : purpose.text);
                   await repository.addAppointment(appointment);
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop(true);
                 } catch (e) {
                   final snackBar = SnackBar(
                       content:

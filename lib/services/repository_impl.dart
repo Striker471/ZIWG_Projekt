@@ -11,13 +11,11 @@ class RepositoryImpl implements Repository {
   Future<void> addAppointment(Appointment appointment) async {
     await _firestore
         .collection(FirebasePaths.appointments)
-        .add(appointment.toMap(getUserId()));
+        .add(appointment.toDTOMap(getUserId()));
   }
 
   @override
   Future<List<Appointment>> getAppointments() async {
-    // TODO: implement getAppointments
-    // throw UnimplementedError();
     var querySnapshot = await _firestore
         .collection(FirebasePaths.appointments)
         .where("userId", isEqualTo: getUserId())

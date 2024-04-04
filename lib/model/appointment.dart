@@ -30,7 +30,7 @@ class Appointment {
         purpose: data['purpose'] as String?);
   }
 
-  Map<String, dynamic> toMap(String userId) {
+  Map<String, dynamic> toDTOMap(String userId) {
     return {
       'userId': userId,
       'date': Timestamp.fromDate(date),
@@ -38,6 +38,18 @@ class Appointment {
       'doctorName': doctorName,
       'location': location,
       'purpose': purpose
+    };
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'userId': userId,
+      'date': date.toIso8601String(), // Conversion DateTime to String ISO-8601 XD
+      'doctorType': doctorType,
+      'doctorName': doctorName,
+      'location': location,
+      'purpose': purpose,
     };
   }
 }
