@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:health_care_app/appointments/appointment_container.dart';
 import 'package:health_care_app/appointments/appointment_form.dart';
-import 'package:health_care_app/appointments/appointment_global.dart';
 import 'package:health_care_app/appointments/main_switch.dart';
 import 'package:health_care_app/blank_scaffold.dart';
+import 'package:health_care_app/services/repository.dart';
+import 'package:health_care_app/services/repository_impl.dart';
+import 'package:health_care_app/widgets/message.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -21,15 +23,38 @@ class _MainAppointmentsState extends State<MainAppointments> {
   List selectedDayAppointments = [];
   List selectedAfterDayAppointments = [];
   Map groupedAfterDayAppointments = {};
+  final Repository repository = RepositoryImpl();
+  List<Map<String, dynamic>> appointments = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadAppointments();
+  }
+
+  Future<void> loadAppointments() async {
+    try {
+      var loadedAppointments = await repository.getAppointments();
+      setState(() {
+        appointments = loadedAppointments
+            .map((appointment) => appointment.toMap())
+            .toList();
+      });
+    } catch (e) {
+      showInfo('Failed to load appointment: ${e.toString()}.');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return BlankScaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const AppointmentForm(),
-          )),
+          onPressed: () async {
+            final result = await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const AppointmentForm()));
+            if (result == true) await loadAppointments();
+          },
           shape: const CircleBorder(),
           child: const Icon(Icons.add),
         ),
@@ -40,7 +65,7 @@ class _MainAppointmentsState extends State<MainAppointments> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 70),
+                const SizedBox(height: 110),
                 SizedBox(
                   width: size.width * 0.9,
                   child: MainSwitch(
