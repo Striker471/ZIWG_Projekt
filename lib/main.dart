@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:health_care_app/auth/login_page.dart';
 import 'package:health_care_app/firebase_options.dart';
 import 'package:health_care_app/global.dart';
 import 'package:health_care_app/widgets/action_container.dart';
+import 'package:health_care_app/widgets/message.dart';
 import 'package:health_care_app/widgets/search_bar_container.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -25,13 +27,17 @@ void main() async {
   runApp(const MainApp());
 }
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: FToastBuilder(),
       debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
       title: 'Health Care App',
       theme: ThemeData(
         dialogTheme: const DialogTheme(elevation: 0),
@@ -129,17 +135,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                 (route) => false,
                               );
                             } else {
-                              const snackBar = SnackBar(
-                                  content: Text(
-                                      'Błąd: Nie udało się poprawnie wylogować użytkownika'));
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
+                              showInfo('Failed to log out.');
                             }
                           } catch (e) {
-                            final snackBar =
-                                SnackBar(content: Text(e.toString()));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
+                            showInfo('Failed to log out: ${e.toString()}.');
                           }
                         },
                       ),

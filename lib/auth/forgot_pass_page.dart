@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:health_care_app/auth/login_page.dart';
 import 'package:health_care_app/auth/login_page_template.dart';
+import 'package:health_care_app/widgets/message.dart';
 import 'package:health_care_app/widgets/simple_button.dart';
 import 'package:health_care_app/widgets/text_input_form.dart';
 
@@ -37,10 +38,14 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
               textColor: Colors.black,
               onPressed: () async {
                 String userEmail = email.text;
-                await resetPassword(userEmail);
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => const LoginPage(),
-                ));
+                try {
+                  await resetPassword(userEmail);
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ));
+                } catch (e) {
+                  showInfo('Failed to send email: ${e.toString()}.');
+                }
               }),
         ],
       ),

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:health_care_app/auth/login_page.dart';
 import 'package:health_care_app/auth/login_page_template.dart';
+import 'package:health_care_app/widgets/message.dart';
 import 'package:health_care_app/widgets/simple_button.dart';
 import 'package:health_care_app/widgets/text_input_form.dart';
 
@@ -64,8 +65,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     builder: (context) => const LoginPage(),
                   ));
                 } catch (e) {
-                  final snackBar = SnackBar(content: Text(e.toString()));
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  showInfo('Failed to sign up: ${e.toString()}.');
                 }
               }),
         ],

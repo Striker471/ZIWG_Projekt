@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:health_care_app/blank_scaffold.dart';
 import 'package:health_care_app/global.dart';
+import 'package:health_care_app/model/appointment.dart';
+import 'package:health_care_app/services/repository.dart';
+import 'package:health_care_app/services/repository_impl.dart';
 import 'package:health_care_app/widgets/date_and_time_picker.dart';
+import 'package:health_care_app/widgets/message.dart';
 import 'package:health_care_app/widgets/simple_button.dart';
 import 'package:health_care_app/widgets/text_input_form.dart';
+import 'package:intl/intl.dart';
 
 class AppointmentForm extends StatefulWidget {
   const AppointmentForm({super.key});
@@ -19,6 +24,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
   TextEditingController doctorName = TextEditingController();
   TextEditingController location = TextEditingController();
   TextEditingController purpose = TextEditingController();
+
+  final Repository repository = RepositoryImpl(); // prymitywne to ale dziala ^^
 
   @override
   Widget build(BuildContext context) {
@@ -83,17 +90,25 @@ class _AppointmentFormState extends State<AppointmentForm> {
           SimpleButton(
               title: 'Submit',
               textColor: Colors.black,
-              onPressed: () {
+              onPressed: () async {
                 // TODO: Logika za dodaniem nowego spotakania. Jak się uda to pop
                 // Zakładamy że purpose nie jest wymagany!
-
-                String appDate = date.text;
-                String appType = doctorType.text;
-                String appName = doctorName.text;
-                String appLocation = location.text;
-                String appPurpose = purpose.text;
-
-                Navigator.of(context).pop();
+                // !!! kilka uwag, jak chcemy przechowywac niewymagany purpose w bazie czy null czy pusty string,
+                // nalezy dodac obslugę braku wpisanych wartosci
+                // pusty string!
+                try {
+                  final format = DateFormat('yyyy-MM-dd h:mm a');
+                  Appointment appointment = Appointment(
+                      date: format.parse(date.text),
+                      doctorType: doctorType.text,
+                      doctorName: doctorName.text,
+                      location: location.text,
+                      purpose: purpose.text.isEmpty ? null : purpose.text);
+                  await repository.addAppointment(appointment);
+                  Navigator.of(context).pop(true);
+                } catch (e) {
+                  showInfo('Failed to add appointment: ${e.toString()}.');
+                }
               }),
         ],
       ),
