@@ -7,6 +7,7 @@ import 'package:health_care_app/auth/google_button.dart';
 import 'package:health_care_app/auth/login_page_template.dart';
 import 'package:health_care_app/auth/sign_up_page.dart';
 import 'package:health_care_app/main.dart';
+import 'package:health_care_app/widgets/message.dart';
 import 'package:health_care_app/widgets/simple_button.dart';
 import 'package:health_care_app/widgets/text_button.dart';
 import 'package:health_care_app/widgets/text_input_form.dart';
@@ -93,9 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                     builder: (context) => const MyHomePage(),
                   ));
                 } catch (e) {
-                  // TODO: Snackbar itp ze zostaly podane niepoprawne dane.
-                  final snackBar = SnackBar(content: Text(e.toString()));
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  showInfo('Failed to log in: ${e.toString()}.');
                 }
               }),
         ],

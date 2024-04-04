@@ -28,7 +28,7 @@ class SimpleButton extends StatelessWidget {
             child: Text(title,
                 style: TextStyle(
                     color: textColor,
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.w600))));
   }
 }

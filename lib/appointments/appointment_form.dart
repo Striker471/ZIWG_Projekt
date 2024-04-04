@@ -6,6 +6,7 @@ import 'package:health_care_app/model/appointment.dart';
 import 'package:health_care_app/services/repository.dart';
 import 'package:health_care_app/services/repository_impl.dart';
 import 'package:health_care_app/widgets/date_and_time_picker.dart';
+import 'package:health_care_app/widgets/message.dart';
 import 'package:health_care_app/widgets/simple_button.dart';
 import 'package:health_care_app/widgets/text_input_form.dart';
 import 'package:intl/intl.dart';
@@ -94,6 +95,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                 // Zakładamy że purpose nie jest wymagany!
                 // !!! kilka uwag, jak chcemy przechowywac niewymagany purpose w bazie czy null czy pusty string,
                 // nalezy dodac obslugę braku wpisanych wartosci
+                // pusty string!
                 try {
                   final format = DateFormat('yyyy-MM-dd h:mm a');
                   Appointment appointment = Appointment(
@@ -105,10 +107,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                   await repository.addAppointment(appointment);
                   Navigator.of(context).pop(true);
                 } catch (e) {
-                  final snackBar = SnackBar(
-                      content:
-                          Text('Failed to add appointment: ${e.toString()}'));
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  showInfo('Failed to add appointment: ${e.toString()}.');
                 }
               }),
         ],
