@@ -1,9 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:health_care_app/blank_scaffold.dart';
 import 'package:health_care_app/notifications/notification_container.dart';
 import 'package:health_care_app/notifications/notification_form.dart';
 import 'package:health_care_app/notifications/notification_service.dart';
 import 'package:health_care_app/notifications/notifications_global.dart';
+import 'package:health_care_app/services/repository.dart';
+import 'package:health_care_app/services/repository_impl.dart';
+import 'package:health_care_app/widgets/message.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MainNotifications extends StatefulWidget {
   const MainNotifications({super.key});
@@ -13,13 +19,37 @@ class MainNotifications extends StatefulWidget {
 }
 
 class _MainNotificationsState extends State<MainNotifications> {
-  DateTime today = DateTime.now();
+  final Repository repository = RepositoryImpl();
+  final notificationService = NotificationService();
+  List<Map<String, dynamic>> notifications = [];
   Map groupedNotification = {};
 
   @override
   void initState() {
-    groupedNotification = groupNotificationsBySchedule(notifications);
+    requestPermissions();
+    loadNotifications();
     super.initState();
+  }
+
+  Future<void> loadNotifications() async {
+    try {
+      var loadedNotifications = await repository.getNotifications();
+      setState(() {
+        notifications = loadedNotifications
+            .map((appointment) => appointment.toMap())
+            .toList();
+        groupedNotification = groupNotificationsBySchedule(notifications);
+      });
+    } catch (e) {
+      displayErrorMotionToast('Failed to load notifications.', context);
+    }
+  }
+
+  requestPermissions() async {
+    var notificaionStatus = await Permission.notification.request();
+    if (!notificaionStatus.isGranted) {
+      displayErrorMotionToast('Required consents were not accepted.', context);
+    }
   }
 
   @override
@@ -48,8 +78,7 @@ class _MainNotificationsState extends State<MainNotifications> {
                   itemCount: NotificationSchedule.values.length,
                   itemBuilder: (context, index) {
                     var notificationsForSchedule = groupedNotification[
-                        translateNotificationForGroup(
-                            NotificationSchedule.values[index])];
+                        NotificationSchedule.values[index].toString()];
 
                     if (notificationsForSchedule != null) {
                       return Column(
@@ -91,7 +120,7 @@ class _MainNotificationsState extends State<MainNotifications> {
     Map groupedBySchedule = {};
 
     for (var notification in notifications) {
-      String schedule = notification['schedule'];
+      String schedule = notification['interval'];
       if (!groupedBySchedule.containsKey(schedule)) {
         groupedBySchedule[schedule] = [];
       }

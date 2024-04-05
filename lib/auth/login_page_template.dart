@@ -5,8 +5,14 @@ import 'package:health_care_app/blank_scaffold.dart';
 class LoginPageTemplate extends StatelessWidget {
   final Widget body;
   final bool showLeading;
+  final String title;
+  final String photoUrl;
   const LoginPageTemplate(
-      {super.key, required this.body, this.showLeading = true});
+      {super.key,
+      required this.body,
+      this.showLeading = true,
+      this.title = 'Health Care App',
+      this.photoUrl = 'assets/undraw_medicine_b-1-ol-2.svg'});
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +31,14 @@ class LoginPageTemplate extends StatelessWidget {
                       ? size.height * 0.2
                       : 20),
               SvgPicture.asset(
-                'assets/undraw_medicine_b-1-ol-2.svg',
+                photoUrl,
                 height: size.height * 0.25,
               ),
               const SizedBox(height: 10),
-              const Text(
-                'Health Care App',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              Text(
+                title,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 10),
               body,

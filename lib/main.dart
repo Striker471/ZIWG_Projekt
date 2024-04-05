@@ -6,23 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_care_app/auth/login_page.dart';
 import 'package:health_care_app/firebase_options.dart';
 import 'package:health_care_app/global.dart';
 import 'package:health_care_app/widgets/action_container.dart';
 import 'package:health_care_app/widgets/message.dart';
 import 'package:health_care_app/widgets/search_bar_container.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Future.delayed(const Duration(seconds: 1));
-  await initializeDateFormatting();
   FlutterNativeSplash.remove();
-  tz.initializeTimeZones();
   runApp(const MainApp());
 }
 
@@ -121,7 +118,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         onPressed: () async {
                           try {
                             await FirebaseAuth.instance.signOut();
+                            await GoogleSignIn().signOut();
+
                             User? user = FirebaseAuth.instance.currentUser;
+
                             if (user == null) {
                               Navigator.pushAndRemoveUntil(
                                 context,

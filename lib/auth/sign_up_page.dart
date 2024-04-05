@@ -32,6 +32,8 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return LoginPageTemplate(
+      title: "Sign Up",
+      photoUrl: 'assets/undraw_undraw_sign_up_ln1s_-1-_s4bc.svg',
       body: Column(
         children: [
           TextInputForm(

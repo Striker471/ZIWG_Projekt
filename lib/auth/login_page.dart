@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_care_app/auth/forgot_pass_page.dart';
 import 'package:health_care_app/auth/google_button.dart';
 import 'package:health_care_app/auth/login_page_template.dart';
@@ -50,11 +51,14 @@ class _LoginPageState extends State<LoginPage> {
           GoogleButton(
               width: size.width * 0.9,
               title: 'Continue with Google',
-              onPressed: () {
-                // TODO: Logika za logowaniem przez GOOGLE. Jeżeli się uda to Navigator
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => const MyHomePage(),
-                ));
+              onPressed: () async {
+                User? user = await signInWithGoogle();
+                if (user != null) {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => const MyHomePage()));
+                } else {
+                  displayErrorMotionToast('Failed to log in.', context);
+                }
               }),
           const SizedBox(height: 10),
           Row(
@@ -105,5 +109,23 @@ class _LoginPageState extends State<LoginPage> {
   Future signIn(String email, String password) async {
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password);
+  }
+
+  Future<User?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) return null;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      return userCredential.user;
+    } catch (e) {
+      return null;
+    }
   }
 }

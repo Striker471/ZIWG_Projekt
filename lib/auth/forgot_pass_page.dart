@@ -28,6 +28,8 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return LoginPageTemplate(
+      title: "Remind password",
+      photoUrl: 'assets/undraw_my_password_re_ydq7.svg',
       body: Column(
         children: [
           TextInputForm(
