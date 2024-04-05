@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:health_care_app/global.dart';
 import 'package:intl/intl.dart';
 
 selectDateTime(BuildContext context, TextEditingController controller) async {
@@ -11,10 +12,10 @@ selectDateTime(BuildContext context, TextEditingController controller) async {
       lastDate: DateTime(2100),
       builder: (context, child) {
         return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
-              primary: Theme.of(context).primaryColor,
-            ),
+          data: ThemeData(
+            colorScheme: ColorScheme.fromSwatch(
+                primarySwatch:
+                    getMaterialColor(Theme.of(context).colorScheme.primary)),
           ),
           child: child!,
         );
@@ -26,10 +27,10 @@ selectDateTime(BuildContext context, TextEditingController controller) async {
         initialTime: TimeOfDay.now(),
         builder: (context, child) {
           return Theme(
-            data: ThemeData.light().copyWith(
-              colorScheme: ColorScheme.light(
-                primary: Theme.of(context).primaryColor,
-              ),
+            data: ThemeData(
+              colorScheme: ColorScheme.fromSwatch(
+                  primarySwatch:
+                      getMaterialColor(Theme.of(context).colorScheme.primary)),
             ),
             child: child!,
           );

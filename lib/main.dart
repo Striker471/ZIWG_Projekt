@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_care_app/auth/login_page.dart';
 import 'package:health_care_app/firebase_options.dart';
 import 'package:health_care_app/global.dart';
@@ -119,7 +120,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         onPressed: () async {
                           try {
                             await FirebaseAuth.instance.signOut();
+                            await GoogleSignIn().signOut();
+
                             User? user = FirebaseAuth.instance.currentUser;
+
                             if (user == null) {
                               Navigator.pushAndRemoveUntil(
                                 context,

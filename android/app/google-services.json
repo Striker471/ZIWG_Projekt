@@ -12,7 +12,20 @@
           "package_name": "com.example.health_care_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "931934117255-dichkl7itpb4u2j4vkgptmnot05evgn2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.health_care_app",
+            "certificate_hash": "4ac1a6c5c1eb3a3b45ab17451a3a5e474a7b5803"
+          }
+        },
+        {
+          "client_id": "931934117255-8ulu5d8b5iq1bgmbtbtqpc2ks83q82a9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBuPyZ7MEd4quqJ3R73HYxNc6WWx1W_CmM"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "931934117255-8ulu5d8b5iq1bgmbtbtqpc2ks83q82a9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "931934117255-1p9i035on4ap7d8ipct8jotcrsb5dnci.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.healthCareApp.RunnerTests"
+              }
+            }
+          ]
         }
       }
     }
