@@ -28,6 +28,13 @@ class RepositoryImpl implements Repository {
   }
 
   @override
+  Future<void> deleteAppointment(String id) async {
+    var questionDocRef =
+        _firestore.collection(FirebasePaths.appointments).doc(id);
+    return await questionDocRef.delete();
+  }
+
+  @override
   Future<void> addNotification(Notification notification) async {
     await _firestore
         .collection(FirebasePaths.notifications)
@@ -43,6 +50,13 @@ class RepositoryImpl implements Repository {
     return querySnapshot.docs
         .map((doc) => Notification.fromSnaphot(doc))
         .toList();
+  }
+
+  @override
+  Future<void> deleteNotification(String id) async {
+    var questionDocRef =
+        _firestore.collection(FirebasePaths.notifications).doc(id);
+    return await questionDocRef.delete();
   }
 
   @override
