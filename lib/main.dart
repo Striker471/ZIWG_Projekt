@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_care_app/auth/login_page.dart';
 import 'package:health_care_app/firebase_options.dart';
 import 'package:health_care_app/global.dart';
@@ -25,17 +25,13 @@ void main() async {
   runApp(const MainApp());
 }
 
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      builder: FToastBuilder(),
       debugShowCheckedModeBanner: false,
-      navigatorKey: navigatorKey,
       title: 'Health Care App',
       theme: ThemeData(
         dialogTheme: const DialogTheme(elevation: 0),
@@ -124,7 +120,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         onPressed: () async {
                           try {
                             await FirebaseAuth.instance.signOut();
+                            await GoogleSignIn().signOut();
+
                             User? user = FirebaseAuth.instance.currentUser;
+
                             if (user == null) {
                               Navigator.pushAndRemoveUntil(
                                 context,
@@ -133,10 +132,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                 (route) => false,
                               );
                             } else {
-                              showInfo('Failed to log out.');
+                              displayErrorMotionToast(
+                                  'Failed to log out.', context);
                             }
                           } catch (e) {
-                            showInfo('Failed to log out: ${e.toString()}.');
+                            displayErrorMotionToast(
+                                'Failed to log out.', context);
                           }
                         },
                       ),

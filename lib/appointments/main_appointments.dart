@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:health_care_app/appointments/appointment_container.dart';
 import 'package:health_care_app/appointments/appointment_form.dart';
@@ -41,7 +43,7 @@ class _MainAppointmentsState extends State<MainAppointments> {
             .toList();
       });
     } catch (e) {
-      showInfo('Failed to load appointment: ${e.toString()}.');
+      displayErrorMotionToast('Failed to load appointment.', context);
     }
   }
 
