@@ -13,14 +13,12 @@ import 'package:health_care_app/global.dart';
 import 'package:health_care_app/widgets/action_container.dart';
 import 'package:health_care_app/widgets/message.dart';
 import 'package:health_care_app/widgets/search_bar_container.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Future.delayed(const Duration(seconds: 1));
-  await initializeDateFormatting();
   FlutterNativeSplash.remove();
   runApp(const MainApp());
 }
