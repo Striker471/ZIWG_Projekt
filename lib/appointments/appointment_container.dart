@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:health_care_app/services/repository.dart';
+import 'package:health_care_app/widgets/message.dart';
 import 'package:health_care_app/widgets/popup_window.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class AppointnentContainer extends StatelessWidget {
   final Map appointmentMap;
-  const AppointnentContainer({super.key, required this.appointmentMap});
+  final Repository repository;
+  const AppointnentContainer(
+      {super.key, required this.appointmentMap, required this.repository});
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +35,15 @@ class AppointnentContainer extends StatelessWidget {
                           title: "Delete appointment",
                           message:
                               "Do you really want to delete this appointment?",
-                          onPressed: () {
-                            //TODO: usuwanie appointment
-                            Navigator.of(context).pop();
+                          onPressed: () async {
+                            try {
+                              await repository
+                                  .deleteAppointment(appointmentMap['id']);
+                              Navigator.of(context).pop();
+                            } catch (e) {
+                              displayErrorMotionToast(
+                                  'Failed to delete appointment.', context);
+                            }
                           },
                         );
                       },

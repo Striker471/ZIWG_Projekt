@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:health_care_app/appointments/appointment_container.dart';
 import 'package:health_care_app/notifications/notification_service.dart';
+import 'package:health_care_app/services/repository.dart';
+import 'package:health_care_app/services/repository_impl.dart';
+import 'package:health_care_app/widgets/message.dart';
 import 'package:health_care_app/widgets/popup_window.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -18,6 +21,7 @@ class NotificationContainer extends StatefulWidget {
 
 class _NotificationContainerState extends State<NotificationContainer> {
   final notificationService = NotificationService();
+  final Repository repository = RepositoryImpl();
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +50,14 @@ class _NotificationContainerState extends State<NotificationContainer> {
                             // this deletes sending notification
                             await notificationService.cancelOneNotification(
                                 widget.notificationMap['channelId']);
-
-                            //TODO: usuwanie appointment
-                            Navigator.of(context).pop();
+                            try {
+                              await repository.deleteNotification(
+                                  widget.notificationMap['id']);
+                              Navigator.of(context).pop();
+                            } catch (e) {
+                              displayErrorMotionToast(
+                                  'Failed to delete appointment.', context);
+                            }
                           },
                         );
                       },

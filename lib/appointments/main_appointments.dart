@@ -154,6 +154,7 @@ class _MainAppointmentsState extends State<MainAppointments> {
                       padding: const EdgeInsets.all(4.0),
                       child: AppointnentContainer(
                         appointmentMap: appointment,
+                        repository : repository
                       ),
                     ))
                 .toList(),
@@ -225,7 +226,7 @@ class _MainAppointmentsState extends State<MainAppointments> {
         ...selectedDayAppointments
             .map((appointment) => Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: AppointnentContainer(appointmentMap: appointment),
+                  child: AppointnentContainer(appointmentMap: appointment, repository: repository),
                 ))
             .toList()
       ],
