@@ -10,6 +10,7 @@ import 'package:health_care_app/services/repository.dart';
 import 'package:health_care_app/services/repository_impl.dart';
 import 'package:health_care_app/widgets/message.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:health_care_app/model/notification.dart' as notificationmodel;
 
 class MainNotifications extends StatefulWidget {
   const MainNotifications({super.key});
@@ -21,28 +22,15 @@ class MainNotifications extends StatefulWidget {
 class _MainNotificationsState extends State<MainNotifications> {
   final Repository repository = RepositoryImpl();
   final notificationService = NotificationService();
-  List<Map<String, dynamic>> notifications = [];
+  List<notificationmodel.Notification> notifications = [];
   Map groupedNotification = {};
+  Future? getNotifications;
 
   @override
   void initState() {
     requestPermissions();
-    loadNotifications();
+    getNotifications = repository.getNotifications();
     super.initState();
-  }
-
-  Future<void> loadNotifications() async {
-    try {
-      var loadedNotifications = await repository.getNotifications();
-      setState(() {
-        notifications = loadedNotifications
-            .map((appointment) => appointment.toMap())
-            .toList();
-        groupedNotification = groupNotificationsBySchedule(notifications);
-      });
-    } catch (e) {
-      displayErrorMotionToast('Failed to load notifications.', context);
-    }
   }
 
   requestPermissions() async {
@@ -58,69 +46,103 @@ class _MainNotificationsState extends State<MainNotifications> {
     return BlankScaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const NotificationForm(),
+            builder: (context) => NotificationForm(
+              onAdd: (newNotification) {
+                setState(() {
+                  notifications.add(newNotification);
+                });
+              },
+            ),
           )),
           shape: const CircleBorder(),
           child: const Icon(Icons.add),
         ),
-        body: SizedBox(
-          width: size.width,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 70),
-                ListView.builder(
-                  padding: EdgeInsets.zero,
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: NotificationSchedule.values.length,
-                  itemBuilder: (context, index) {
-                    var notificationsForSchedule = groupedNotification[
-                        NotificationSchedule.values[index].toString()];
+        body: FutureBuilder(
+            future: getNotifications,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return const Center(
+                    child: Text('Wystąpił błąd. Spróbuj ponownie później.'));
+              } else if (snapshot.data!.isEmpty) {
+                return const Center(child: Text('Nie znaleziono transakcji.'));
+              } else {
+                notifications = snapshot.data;
+                groupedNotification =
+                    groupNotificationsBySchedule(notifications);
 
-                    if (notificationsForSchedule != null) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Text(
-                              translateNotificationSchedule(
-                                  NotificationSchedule.values[index]),
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black),
-                            ),
-                          ),
-                          ...notificationsForSchedule
-                              .map((notification) => Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: NotificationContainer(
-                                      notificationMap: notification,
+                return SizedBox(
+                  width: size.width,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 70),
+                        ListView.builder(
+                          padding: EdgeInsets.zero,
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: NotificationSchedule.values.length,
+                          itemBuilder: (context, index) {
+                            var notificationsForSchedule = groupedNotification[
+                                NotificationSchedule.values[index].toString()];
+
+                            if (notificationsForSchedule != null) {
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
+                                    child: Text(
+                                      translateNotificationSchedule(
+                                          NotificationSchedule.values[index]),
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black),
                                     ),
-                                  ))
-                              .toList(),
-                        ],
-                      );
-                    }
-                    return const SizedBox.shrink();
-                  },
-                )
-              ],
-            ),
-          ),
-        ));
+                                  ),
+                                  ...notificationsForSchedule
+                                      .map((notification) => Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: NotificationContainer(
+                                              notificationMap: notification,
+                                              onDelete: (notificationId) {
+                                                setState(() {
+                                                  notifications.removeWhere(
+                                                      (element) =>
+                                                          element.id ==
+                                                          notificationId);
+                                                });
+                                              },
+                                            ),
+                                          ))
+                                      .toList(),
+                                ],
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }
+            }));
   }
 
-  Map groupNotificationsBySchedule(List notifications) {
-    Map groupedBySchedule = {};
+  Map<String, List<notificationmodel.Notification>>
+      groupNotificationsBySchedule(
+          List<notificationmodel.Notification> notifications) {
+    Map<String, List<notificationmodel.Notification>> groupedBySchedule = {};
 
-    for (var notification in notifications) {
-      String schedule = notification['interval'];
+    for (notificationmodel.Notification notification in notifications) {
+      String schedule = notification.interval;
       if (!groupedBySchedule.containsKey(schedule)) {
         groupedBySchedule[schedule] = [];
       }

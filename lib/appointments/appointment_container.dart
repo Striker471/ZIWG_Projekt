@@ -1,5 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:health_care_app/model/appointment.dart';
 import 'package:health_care_app/services/repository.dart';
 import 'package:health_care_app/widgets/message.dart';
 import 'package:health_care_app/widgets/popup_window.dart';
@@ -7,10 +10,14 @@ import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class AppointnentContainer extends StatelessWidget {
-  final Map appointmentMap;
+  final Appointment appointmentMap;
   final Repository repository;
+  final Function(String) onDelete;
   const AppointnentContainer(
-      {super.key, required this.appointmentMap, required this.repository});
+      {super.key,
+      required this.appointmentMap,
+      required this.repository,
+      required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +45,8 @@ class AppointnentContainer extends StatelessWidget {
                           onPressed: () async {
                             try {
                               await repository
-                                  .deleteAppointment(appointmentMap['id']);
+                                  .deleteAppointment(appointmentMap.id ?? "");
+                              onDelete(appointmentMap.id ?? "");
                               Navigator.of(context).pop();
                             } catch (e) {
                               displayErrorMotionToast(
@@ -65,7 +73,7 @@ class AppointnentContainer extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                appointmentMap['doctorType'],
+                appointmentMap.doctorType,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
@@ -74,20 +82,17 @@ class AppointnentContainer extends StatelessWidget {
                     color: Colors.black),
               ),
               ContainerRow(
-                  title: appointmentMap['doctorName'],
+                  title: appointmentMap.doctorName,
                   iconData: Icons.person,
                   textMaxLines: 1),
               ContainerRow(
-                  title: DateFormat('h:mm a')
-                      .format(DateTime.parse(appointmentMap['date'])),
+                  title: DateFormat('h:mm a').format(appointmentMap.date),
                   iconData: MdiIcons.clock,
                   iconSize: 20,
                   textMaxLines: 1),
               ContainerRow(
-                  title: appointmentMap['location'],
-                  iconData: Icons.location_pin),
-              appointmentMap.containsKey('purpose') &&
-                      appointmentMap['purpose'] != ""
+                  title: appointmentMap.location, iconData: Icons.location_pin),
+              appointmentMap.purpose != null && appointmentMap.purpose != ""
                   ? Row(
                       children: [
                         Center(
@@ -95,7 +100,7 @@ class AppointnentContainer extends StatelessWidget {
                               size: 20, color: Theme.of(context).primaryColor),
                         ),
                         const SizedBox(width: 5),
-                        Expanded(child: Text(appointmentMap['purpose'])),
+                        Expanded(child: Text(appointmentMap.purpose!)),
                       ],
                     )
                   : const SizedBox.shrink()

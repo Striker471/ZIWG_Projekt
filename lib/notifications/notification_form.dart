@@ -15,7 +15,8 @@ import 'package:health_care_app/widgets/text_input_form.dart';
 import 'package:intl/intl.dart';
 
 class NotificationForm extends StatefulWidget {
-  const NotificationForm({super.key});
+  final Function(notificationmodel.Notification) onAdd;
+  const NotificationForm({super.key, required this.onAdd});
 
   @override
   State<NotificationForm> createState() => _NotificationFormState();
@@ -78,7 +79,9 @@ class _NotificationFormState extends State<NotificationForm> {
                             interval: schedule.toString(),
                             channelId: channelId,
                             scheduledDate: format.parse(formatDate(format)));
-                    await repository.addNotification(notification);
+                    notificationmodel.Notification addedNotification =
+                        await repository.addNotification(notification);
+                    widget.onAdd(addedNotification);
                     setCyclicNotifications(schedule, name.text, channelId);
                     Navigator.of(context).pop();
                   } catch (e) {

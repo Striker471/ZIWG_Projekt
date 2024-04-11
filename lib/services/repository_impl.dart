@@ -10,10 +10,14 @@ class RepositoryImpl implements Repository {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   @override
-  Future<void> addAppointment(Appointment appointment) async {
-    await _firestore
+  Future<Appointment> addAppointment(Appointment appointment) async {
+    DocumentReference documentReference = await _firestore
         .collection(FirebasePaths.appointments)
         .add(appointment.toDTOMap(getUserId()));
+
+    DocumentSnapshot<Object?> documentSnapshot = await documentReference.get();
+
+    return Appointment.fromSnaphot(documentSnapshot);
   }
 
   @override
@@ -35,10 +39,14 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Future<void> addNotification(Notification notification) async {
-    await _firestore
+  Future<Notification> addNotification(Notification notification) async {
+    DocumentReference documentReference = await _firestore
         .collection(FirebasePaths.notifications)
         .add(notification.toDTOMap(getUserId()));
+
+    DocumentSnapshot<Object?> documentSnapshot = await documentReference.get();
+
+    return Notification.fromSnaphot(documentSnapshot);
   }
 
   @override

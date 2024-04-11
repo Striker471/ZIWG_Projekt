@@ -10,10 +10,13 @@ import 'package:health_care_app/widgets/message.dart';
 import 'package:health_care_app/widgets/popup_window.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:health_care_app/model/notification.dart' as notificationmodel;
 
 class NotificationContainer extends StatefulWidget {
-  final Map notificationMap;
-  const NotificationContainer({super.key, required this.notificationMap});
+  final notificationmodel.Notification notificationMap;
+  final Function(String) onDelete;
+  const NotificationContainer(
+      {super.key, required this.notificationMap, required this.onDelete});
 
   @override
   State<NotificationContainer> createState() => _NotificationContainerState();
@@ -49,10 +52,11 @@ class _NotificationContainerState extends State<NotificationContainer> {
                           onPressed: () async {
                             // this deletes sending notification
                             await notificationService.cancelOneNotification(
-                                widget.notificationMap['channelId']);
+                                widget.notificationMap.channelId);
                             try {
                               await repository.deleteNotification(
-                                  widget.notificationMap['id']);
+                                  widget.notificationMap.id ?? "");
+                              widget.onDelete(widget.notificationMap.id ?? "");
                               Navigator.of(context).pop();
                             } catch (e) {
                               displayErrorMotionToast(
@@ -79,7 +83,7 @@ class _NotificationContainerState extends State<NotificationContainer> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                widget.notificationMap['name'],
+                widget.notificationMap.name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
@@ -88,13 +92,13 @@ class _NotificationContainerState extends State<NotificationContainer> {
                     color: Colors.black),
               ),
               ContainerRow(
-                  title: DateFormat('yyyy-MM-dd').format(
-                      DateTime.parse(widget.notificationMap['scheduledDate'])),
+                  title: DateFormat('yyyy-MM-dd')
+                      .format(widget.notificationMap.scheduledDate),
                   iconData: Icons.calendar_today,
                   textMaxLines: 1),
               ContainerRow(
-                  title: DateFormat('h:mm a').format(
-                      DateTime.parse(widget.notificationMap['scheduledDate'])),
+                  title: DateFormat('h:mm a')
+                      .format(widget.notificationMap.scheduledDate),
                   iconData: MdiIcons.clock,
                   iconSize: 20,
                   textMaxLines: 1),
