@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:health_care_app/api/chat_gpt.dart';
 import 'package:health_care_app/blank_scaffold.dart';
 import 'package:health_care_app/widgets/message.dart';
 import 'package:health_care_app/widgets/simple_button.dart';
@@ -11,7 +12,8 @@ import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'dart:io';
 
 class InsertPdfPage extends StatefulWidget {
-  const InsertPdfPage({super.key});
+  final Function(String) response;
+  const InsertPdfPage({super.key, required this.response});
 
   @override
   State<InsertPdfPage> createState() => _InsertPdfPageState();
@@ -30,11 +32,16 @@ class _InsertPdfPageState extends State<InsertPdfPage> {
           PdfDocument(inputBytes: File(file.path!).readAsBytesSync());
 
       // final PdfDocument document =
-      //     PdfDocument(inputBytes: await readDocumentData('ai.pdf'));
+      //     PdfDocument(inputBytes: await readDocumentData('report.pdf'));
 
       PdfTextExtractor extractor = PdfTextExtractor(document);
       String text = extractor.extractText(layoutText: true);
-      print(text);
+
+      String response = await fetchChatGPTResponse(text, context);
+      print(response);
+
+      // TODO: work on example response it is pasted from real response
+      widget.response(expampleResponse);
 
       document.dispose();
     } else {

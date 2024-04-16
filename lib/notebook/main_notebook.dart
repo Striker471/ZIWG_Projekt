@@ -37,7 +37,12 @@ class _MainNotebookState extends State<MainNotebook> {
               foregroundColor: Colors.white,
               visible: true,
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const InsertPdfPage())),
+                  builder: (context) => InsertPdfPage(
+                        response: (summary) {
+                          String note = summary;
+                          print(note);
+                        },
+                      ))),
             ),
           ],
         ),
