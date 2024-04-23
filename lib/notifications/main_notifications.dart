@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:health_care_app/blank_scaffold.dart';
 import 'package:health_care_app/notifications/notification_container.dart';
@@ -26,9 +28,12 @@ class _MainNotificationsState extends State<MainNotifications> {
   Map groupedNotification = {};
   Future? getNotifications;
 
+
   @override
   void initState() {
+    if (Platform.isAndroid){
     requestPermissions();
+    }
     getNotifications = repository.getNotifications();
     super.initState();
   }

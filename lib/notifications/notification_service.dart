@@ -27,15 +27,19 @@ class NotificationService {
     return _singleton;
   }
 
-  // initialize notification
   NotificationService._internal() {
-    const initializationSettings = InitializationSettings(
-      android: AndroidInitializationSettings('@mipmap/launcher_icon'),
-    );
-
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-    //TODO: IOS
+  const initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/launcher_icon');
+  const initializationSettingsIOS = DarwinInitializationSettings(
+    requestAlertPermission: true,
+    requestBadgePermission: true,
+    requestSoundPermission: true,
+  );
+  const initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,
+  );    
+  
+  flutterLocalNotificationsPlugin.initialize(initializationSettings);
     if (Platform.isAndroid) {
       flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
@@ -47,6 +51,7 @@ class NotificationService {
             importance: Importance.high,
           ));
     }
+    // iOS permissions (already configured in initializationSettingsIOS)
   }
 
   // schedule notification by interval
