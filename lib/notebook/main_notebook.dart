@@ -3,6 +3,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:health_care_app/blank_scaffold.dart';
 import 'package:health_care_app/model/notebook.dart';
 import 'package:health_care_app/notebook/insert_pdf_page.dart';
+import 'package:health_care_app/notebook/notebook_detail.dart';
 import 'package:health_care_app/services/repository.dart';
 import 'package:health_care_app/services/repository_impl.dart';
 
@@ -87,49 +88,55 @@ class _MainNotebookState extends State<MainNotebook> {
           } else {
             notes = snapshot.data as List<Notebook>;
             return Padding(
-              padding: const EdgeInsets.only(
-                  top: 50.0), // Dodatkowy margines na górze
+              padding: const EdgeInsets.only(top: 50.0),
               child: ListView.builder(
                 itemCount: notes.length,
                 itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              notes[index].noteTitle,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => NoteDetailPage(note: notes[index]),
+                      ));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                notes[index].noteTitle,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Data utworzenia: ${notes[index].creationDate}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.grey,
+                              const SizedBox(height: 8),
+                              Text(
+                                'Data utworzenia: ${notes[index].creationDate}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              notes[index].noteContent,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.black,
+                              const SizedBox(height: 8),
+                              Text(
+                                notes[index].noteContent,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.black,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
