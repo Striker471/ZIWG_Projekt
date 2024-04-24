@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:health_care_app/appointments/main_appointments.dart';
 import 'package:health_care_app/blank_scaffold.dart';
+import 'package:health_care_app/chat/chat_page.dart';
 import 'package:health_care_app/localization/hospital_finder.dart';
 import 'package:health_care_app/localization/pharmacy_finder.dart';
 import 'package:health_care_app/notifications/main_notifications.dart';
@@ -24,7 +25,7 @@ Widget getActionRoute(String actionKey) {
     case 'Appointments':
       return const MainAppointments();
     case 'Chat bot':
-      return const BlankScaffold(body: SizedBox());
+      return  ChatPage();
     case 'Nearest hospitals':
       return const HospitalFinder();
     case 'Nearest pharmacies':
