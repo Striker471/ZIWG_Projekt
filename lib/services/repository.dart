@@ -1,3 +1,5 @@
+import 'package:health_care_app/model/notebook.dart';
+
 import '../model/appointment.dart';
 import '../model/notification.dart';
 
@@ -11,6 +13,11 @@ abstract class Repository {
   Future<Notification> addNotification(Notification notification);
   Future<List<Notification>> getNotifications();
   Future<void> deleteNotification(String id);
+
+  // notebook
+  Future<List<Notebook>> getNotes();
+
+
 
   String getUserId();
 }

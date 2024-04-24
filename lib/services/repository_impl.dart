@@ -5,6 +5,8 @@ import 'package:health_care_app/model/notification.dart';
 import 'package:health_care_app/services/firebase_paths.dart';
 import 'package:health_care_app/services/repository.dart';
 
+import '../model/notebook.dart';
+
 class RepositoryImpl implements Repository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -65,6 +67,17 @@ class RepositoryImpl implements Repository {
     var questionDocRef =
         _firestore.collection(FirebasePaths.notifications).doc(id);
     return await questionDocRef.delete();
+  }
+
+  @override
+  Future<List<Notebook>> getNotes() async{
+    var querySnapshot = await _firestore
+        .collection(FirebasePaths.notes)
+        .where("userId", isEqualTo: getUserId())
+        .get();
+    return querySnapshot.docs
+        .map((doc) => Notebook.fromSnaphot(doc))
+        .toList();
   }
 
   @override
