@@ -75,6 +75,7 @@ class RepositoryImpl implements Repository {
         .collection(FirebasePaths.notes)
         .where("userId", isEqualTo: getUserId())
         .get();
+    print(getUserId());
     return querySnapshot.docs
         .map((doc) => Notebook.fromSnaphot(doc))
         .toList();
