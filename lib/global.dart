@@ -4,6 +4,7 @@ import 'package:health_care_app/appointments/main_appointments.dart';
 import 'package:health_care_app/blank_scaffold.dart';
 import 'package:health_care_app/localization/hospital_finder.dart';
 import 'package:health_care_app/localization/pharmacy_finder.dart';
+import 'package:health_care_app/notebook/main_notebook.dart';
 import 'package:health_care_app/notifications/main_notifications.dart';
 
 List<Map<String, String>> homePageActions = [
@@ -20,7 +21,7 @@ Widget getActionRoute(String actionKey) {
     case 'Pill notifications':
       return const MainNotifications();
     case 'Med notebook':
-      return const BlankScaffold(body: SizedBox());
+      return const MainNotebook();
     case 'Appointments':
       return const MainAppointments();
     case 'Chat bot':
