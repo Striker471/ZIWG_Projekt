@@ -40,7 +40,7 @@ class _InsertPdfPageState extends State<InsertPdfPage> {
       String response = await fetchChatGPTResponse(text, context);
       print(response);
 
-      // TODO: work on example response it is pasted from real response
+      // FIXME: work on example response it is pasted from real response
       widget.response(expampleResponse);
 
       document.dispose();
