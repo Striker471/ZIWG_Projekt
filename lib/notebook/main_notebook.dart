@@ -28,7 +28,6 @@ class _MainNotebookState extends State<MainNotebook> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return BlankScaffold(
       floatingActionButton: SpeedDial(
         overlayColor: Colors.black,
@@ -55,24 +54,12 @@ class _MainNotebookState extends State<MainNotebook> {
                 builder: (context) => InsertPdfPage(
                       response: (summary) {
                         String note = summary;
-                        print(note);
+                        // print(note);
                       },
                     ))),
           ),
         ],
       ),
-      // body: SizedBox(
-      //     width: size.width,
-      //     child: const SingleChildScrollView(
-      //       child: Column(
-      //         mainAxisSize: MainAxisSize.min,
-      //         crossAxisAlignment: CrossAxisAlignment.center,
-      //         children: [
-      //           SizedBox(height: 70),
-      //           //TODO: body
-      //         ],
-      //       ),
-      //     )));
       body: FutureBuilder(
         future: getNotes,
         builder: (context, snapshot) {
@@ -87,20 +74,21 @@ class _MainNotebookState extends State<MainNotebook> {
           } else {
             notes = snapshot.data as List<Notebook>;
             return Padding(
-              padding: const EdgeInsets.only(top: 50.0),
+              padding: const EdgeInsets.only(top: 80.0),
               child: ListView.builder(
                 itemCount: notes.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => NoteDetailPage(note: notes[index]),
+                        builder: (context) =>
+                            NoteDetailPage(note: notes[index]),
                       ));
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
-                        height: 200,
+                        height: 180,
                         child: Card(
                           elevation: 4,
                           shape: RoundedRectangleBorder(
@@ -110,6 +98,7 @@ class _MainNotebookState extends State<MainNotebook> {
                             padding: const EdgeInsets.all(16.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
                                   notes[index].noteTitle,
@@ -128,12 +117,16 @@ class _MainNotebookState extends State<MainNotebook> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                Text(
-                                  notes[index].noteContent,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.normal,
-                                    color: Colors.black,
+                                Expanded(
+                                  child: Text(
+                                    notes[index].noteContent,
+                                    maxLines: 5,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
                               ],
