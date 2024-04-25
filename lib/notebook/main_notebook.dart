@@ -29,7 +29,6 @@ class _MainNotebookState extends State<MainNotebook> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    print('Liczba notatek: ${notes.length}');
     return BlankScaffold(
       floatingActionButton: SpeedDial(
         overlayColor: Colors.black,
