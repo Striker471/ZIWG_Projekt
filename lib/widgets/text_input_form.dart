@@ -5,12 +5,14 @@ class TextInputForm extends StatefulWidget {
   final String hint;
   final TextEditingController controller;
   final bool hideText;
+  final Color? hintColor;
   const TextInputForm({
     super.key,
     required this.width,
     required this.hint,
     required this.controller,
     this.hideText = false,
+    this.hintColor,
   });
 
   @override
@@ -47,10 +49,10 @@ class _TextInputFormState extends State<TextInputForm> {
               focusedBorder: boder,
               focusColor: Theme.of(context).colorScheme.primary,
               hintText: widget.hint,
-              hintStyle: const TextStyle(
+              hintStyle: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black),
+                  color: widget.hintColor ?? Colors.black),
             ),
           ),
           if (widget.hideText)

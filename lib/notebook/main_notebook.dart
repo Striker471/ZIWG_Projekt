@@ -53,7 +53,8 @@ class _MainNotebookState extends State<MainNotebook> {
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => InsertPdfPage(
                       response: (summary) {
-                        String note = summary;
+                        // TODO add a new note from chat
+                        // String note = summary;
                         // print(note);
                       },
                     ))),

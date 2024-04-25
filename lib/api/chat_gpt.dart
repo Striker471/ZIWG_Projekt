@@ -44,8 +44,39 @@ Future<String> fetchChatGPTResponse(String prompt, BuildContext context) async {
       var data = jsonDecode(response.body);
       return data['choices'][0]['message']['content'];
     } else {
-      print('Status code: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      displayErrorMotionToast('Failed to get reponse', context);
+      return "";
+    }
+  } catch (e) {
+    displayErrorMotionToast('Error occurred. Failed to get reponse', context);
+    return "";
+  }
+}
+
+Future<String> sendPrompt(String prompt, BuildContext context) async {
+  try {
+    String apiKey = await getApiKey();
+
+    var requestBody = jsonEncode({
+      'model': 'gpt-3.5-turbo',
+      "messages": [
+        {"role": "user", "content": prompt}
+      ],
+      'max_tokens': 1000,
+      'temperature': 0.7
+    });
+
+    var response = await http.post(Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $apiKey',
+        },
+        body: requestBody);
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      return data['choices'][0]['message']['content'];
+    } else {
       displayErrorMotionToast('Failed to fetch data', context);
       return "";
     }
