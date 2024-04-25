@@ -14,7 +14,8 @@ import 'package:health_care_app/widgets/text_input_form.dart';
 import 'package:intl/intl.dart';
 
 class AppointmentForm extends StatefulWidget {
-  const AppointmentForm({super.key});
+  final Function(Appointment) onAdd;
+  const AppointmentForm({super.key, required this.onAdd});
 
   @override
   State<AppointmentForm> createState() => _AppointmentFormState();
@@ -109,8 +110,10 @@ class _AppointmentFormState extends State<AppointmentForm> {
                       doctorName: doctorName.text,
                       location: location.text,
                       purpose: purpose.text.isEmpty ? "" : purpose.text);
-                  await repository.addAppointment(appointment);
-                  Navigator.of(context).pop(true);
+                  Appointment addedAppointment =
+                      await repository.addAppointment(appointment);
+                  widget.onAdd(addedAppointment);
+                  Navigator.of(context).pop();
                 } catch (e) {
                   displayErrorMotionToast(
                       'Failed to add appointment.', context);

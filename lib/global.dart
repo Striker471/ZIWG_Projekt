@@ -4,6 +4,7 @@ import 'package:health_care_app/appointments/main_appointments.dart';
 import 'package:health_care_app/blank_scaffold.dart';
 import 'package:health_care_app/localization/hospital_finder.dart';
 import 'package:health_care_app/localization/pharmacy_finder.dart';
+import 'package:health_care_app/notifications/main_notifications.dart';
 
 List<Map<String, String>> homePageActions = [
   {'Pill notifications': 'assets/undraw_medical_care_movn.svg'},
@@ -17,7 +18,7 @@ List<Map<String, String>> homePageActions = [
 Widget getActionRoute(String actionKey) {
   switch (actionKey) {
     case 'Pill notifications':
-      return const BlankScaffold(body: SizedBox());
+      return const MainNotifications();
     case 'Med notebook':
       return const BlankScaffold(body: SizedBox());
     case 'Appointments':

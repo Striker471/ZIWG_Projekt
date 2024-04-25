@@ -2,22 +2,29 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:health_care_app/model/appointment.dart';
+import 'package:health_care_app/appointments/appointment_container.dart';
+import 'package:health_care_app/notifications/notification_service.dart';
 import 'package:health_care_app/services/repository.dart';
+import 'package:health_care_app/services/repository_impl.dart';
 import 'package:health_care_app/widgets/message.dart';
 import 'package:health_care_app/widgets/popup_window.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:health_care_app/model/notification.dart' as notificationmodel;
 
-class AppointnentContainer extends StatelessWidget {
-  final Appointment appointmentMap;
-  final Repository repository;
+class NotificationContainer extends StatefulWidget {
+  final notificationmodel.Notification notificationMap;
   final Function(String) onDelete;
-  const AppointnentContainer(
-      {super.key,
-      required this.appointmentMap,
-      required this.repository,
-      required this.onDelete});
+  const NotificationContainer(
+      {super.key, required this.notificationMap, required this.onDelete});
+
+  @override
+  State<NotificationContainer> createState() => _NotificationContainerState();
+}
+
+class _NotificationContainerState extends State<NotificationContainer> {
+  final notificationService = NotificationService();
+  final Repository repository = RepositoryImpl();
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +46,17 @@ class AppointnentContainer extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return PopupWindow(
-                          title: "Delete appointment",
+                          title: "Delete notification",
                           message:
-                              "Do you really want to delete this appointment?",
+                              "Do you really want to delete this notification?",
                           onPressed: () async {
+                            // this deletes sending notification
+                            await notificationService.cancelOneNotification(
+                                widget.notificationMap.channelId);
                             try {
-                              await repository
-                                  .deleteAppointment(appointmentMap.id ?? "");
-                              onDelete(appointmentMap.id ?? "");
+                              await repository.deleteNotification(
+                                  widget.notificationMap.id ?? "");
+                              widget.onDelete(widget.notificationMap.id ?? "");
                               Navigator.of(context).pop();
                             } catch (e) {
                               displayErrorMotionToast(
@@ -73,7 +83,7 @@ class AppointnentContainer extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                appointmentMap.doctorType,
+                widget.notificationMap.name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
@@ -82,67 +92,20 @@ class AppointnentContainer extends StatelessWidget {
                     color: Colors.black),
               ),
               ContainerRow(
-                  title: appointmentMap.doctorName,
-                  iconData: Icons.person,
+                  title: DateFormat('yyyy-MM-dd')
+                      .format(widget.notificationMap.scheduledDate),
+                  iconData: Icons.calendar_today,
                   textMaxLines: 1),
               ContainerRow(
-                  title: DateFormat('h:mm a').format(appointmentMap.date),
+                  title: DateFormat('h:mm a')
+                      .format(widget.notificationMap.scheduledDate),
                   iconData: MdiIcons.clock,
                   iconSize: 20,
                   textMaxLines: 1),
-              ContainerRow(
-                  title: appointmentMap.location, iconData: Icons.location_pin),
-              appointmentMap.purpose != null && appointmentMap.purpose != ""
-                  ? Row(
-                      children: [
-                        Center(
-                          child: Icon(Icons.description,
-                              size: 20, color: Theme.of(context).primaryColor),
-                        ),
-                        const SizedBox(width: 5),
-                        Expanded(child: Text(appointmentMap.purpose!)),
-                      ],
-                    )
-                  : const SizedBox.shrink()
             ],
           ),
         ),
       ),
-    );
-  }
-}
-
-class ContainerRow extends StatelessWidget {
-  final String title;
-  final IconData iconData;
-  final double iconSize;
-  final int textMaxLines;
-  const ContainerRow(
-      {super.key,
-      required this.title,
-      required this.iconData,
-      this.iconSize = 22,
-      this.textMaxLines = 2});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Center(
-          child: Icon(iconData,
-              size: iconSize, color: Theme.of(context).primaryColor),
-        ),
-        if (textMaxLines != 2) const SizedBox(width: 5),
-        Expanded(
-          child: Text(
-            title,
-            maxLines: textMaxLines,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-                fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
-          ),
-        ),
-      ],
     );
   }
 }

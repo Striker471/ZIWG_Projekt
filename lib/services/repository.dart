@@ -1,7 +1,16 @@
-import 'package:health_care_app/model/appointment.dart';
+import '../model/appointment.dart';
+import '../model/notification.dart';
 
 abstract class Repository {
-  Future<void> addAppointment(Appointment appointment);
+  // appointment
+  Future<Appointment> addAppointment(Appointment appointment);
   Future<List<Appointment>> getAppointments();
+  Future<void> deleteAppointment(String id);
+
+  // notification
+  Future<Notification> addNotification(Notification notification);
+  Future<List<Notification>> getNotifications();
+  Future<void> deleteNotification(String id);
+
   String getUserId();
 }
