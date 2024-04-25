@@ -81,10 +81,10 @@ class _MainNotebookState extends State<MainNotebook> {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return const Center(
-              child: Text('Wystąpił błąd. Spróbuj ponownie później.'),
+              child: Text('An error occured. Please try again later.'),
             );
           } else if (snapshot.data!.isEmpty) {
-            return const Center(child: Text('Nie znaleziono notatek.'));
+            return const Center(child: Text('No notes found.'));
           } else {
             notes = snapshot.data as List<Notebook>;
             return Padding(
