@@ -60,9 +60,9 @@ class _MainAppointmentsState extends State<MainAppointments> {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return const Center(
-                    child: Text('Wystąpił błąd. Spróbuj ponownie później.'));
+                    child: Text('An error occured. Please try again later.'));
               } else if (snapshot.data!.isEmpty) {
-                return const Center(child: Text('Nie znaleziono transakcji.'));
+                return const Center(child: Text('No transaction found.'));
               } else {
                 appointments = snapshot.data;
 
