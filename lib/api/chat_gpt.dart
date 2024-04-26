@@ -7,6 +7,7 @@ import 'package:health_care_app/widgets/message.dart';
 import 'package:http/http.dart' as http;
 
 const String url = 'https://api.openai.com/v1/chat/completions';
+List<Map> chatMessages = [];
 
 Future<String> getApiKey() async {
   try {
@@ -23,7 +24,7 @@ Future<String> fetchChatGPTResponse(String prompt, BuildContext context) async {
     String apiKey = await getApiKey();
 
     var requestBody = jsonEncode({
-      'model': 'gpt-3.5-turbo', // gpt-3.5-turbo, gpt-4, gpt-3.5-turbo-0125
+      'model': 'gpt-3.5-turbo',
       "messages": [
         {
           "role": "user",
@@ -56,12 +57,11 @@ Future<String> fetchChatGPTResponse(String prompt, BuildContext context) async {
 Future<String> sendPrompt(String prompt, BuildContext context) async {
   try {
     String apiKey = await getApiKey();
+    chatMessages.add({"role": "user", "content": prompt});
 
     var requestBody = jsonEncode({
       'model': 'gpt-3.5-turbo',
-      "messages": [
-        {"role": "user", "content": prompt}
-      ],
+      "messages": chatMessages,
       'max_tokens': 1000,
       'temperature': 0.7
     });
@@ -75,6 +75,7 @@ Future<String> sendPrompt(String prompt, BuildContext context) async {
 
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
+      chatMessages.add(data['choices'][0]['message']);
       return data['choices'][0]['message']['content'];
     } else {
       displayErrorMotionToast('Failed to fetch data', context);
