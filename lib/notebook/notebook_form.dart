@@ -1,61 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:health_care_app/model/notebook.dart';
-
+import 'package:health_care_app/widgets/simple_button.dart';
 
 class NotebookForm extends StatelessWidget {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
   final Function(Notebook) onNoteAdded;
 
-  NotebookForm({required this.onNoteAdded});
+  NotebookForm({super.key, required this.onNoteAdded});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Add New Note'),
+      title: const Text('Add New Note',
+      style: TextStyle(fontFamily: 'Poppins',fontWeight: FontWeight.bold, color: Colors.black),
+      ),
       content: SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            TextField(
+            TextFormField(
               controller: titleController,
-              decoration: InputDecoration(labelText: 'Title'),
+              decoration: const InputDecoration(
+                labelText: 'Title',
+                labelStyle: TextStyle(fontFamily: 'Poppins',fontWeight: FontWeight.bold, color: Colors.black),
+              ),
             ),
-            TextField(
+            const SizedBox(height: 16),
+            TextFormField(
               controller: contentController,
-              decoration: InputDecoration(labelText: 'Content'),
+              decoration: const InputDecoration(
+                labelText: 'Content',
+                labelStyle: TextStyle(fontFamily: 'Poppins',fontWeight: FontWeight.bold, color: Colors.black),
+              ),
+              maxLines: 5, // Adjust the number of lines as needed
             ),
           ],
         ),
       ),
       actions: <Widget>[
-        TextButton(
-          child: Text('Cancel'),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        TextButton(
-          child: Text('Add'),
-          onPressed: () {
-            _addNote();
-            Navigator.of(context).pop();
-          },
+        Row(
+          children: [
+            SimpleButton(
+              title: 'Cancel',
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            const SizedBox(width: 5),
+            SimpleButton(
+              title: 'Add',
+              onPressed: () {
+                _addNote(context);
+              },
+            ),
+          ],
         ),
       ],
     );
   }
 
-  void _addNote() {
-    String title = titleController.text.trim();
-    String content = contentController.text.trim();
-
-    if (title.isNotEmpty && content.isNotEmpty) {
-      Notebook newNote = Notebook(
-        creationDate: DateTime.now().toString(),
-        noteTitle: title,
-        noteContent: content,
+  void _addNote(BuildContext context) {
+    if (titleController.text.trim().isEmpty ||
+        contentController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
       );
-      onNoteAdded(newNote);
+      return;
     }
+    Notebook newNote = Notebook(
+      creationDate: DateTime.now().toString(),
+      noteTitle: titleController.text.trim(),
+      noteContent: contentController.text.trim(),
+    );
+    onNoteAdded(newNote);
+    Navigator.of(context).pop();
   }
 }
