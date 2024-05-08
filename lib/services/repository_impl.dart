@@ -90,6 +90,13 @@ class RepositoryImpl implements Repository {
   }
 
   @override
+  Future<void> deleteNote(String id) async {
+    var questionDocRef =
+        _firestore.collection(FirebasePaths.notes).doc(id);
+    return await questionDocRef.delete();
+  }
+
+  @override
   String getUserId() {
     return _firebaseAuth.currentUser?.uid ??
         (throw Exception("Null Firebase User"));

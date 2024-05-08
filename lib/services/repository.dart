@@ -17,6 +17,7 @@ abstract class Repository {
   // notebook
   Future<Notebook>addNote(Notebook note);
   Future<List<Notebook>> getNotes();
+  Future<void> deleteNote (String id);
 
 
 
