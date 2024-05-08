@@ -6,8 +6,20 @@ class NotebookForm extends StatelessWidget {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
   final Function(Notebook) onNoteAdded;
-
+  
   NotebookForm({super.key, required this.onNoteAdded});
+  // final String? initialContent;
+  
+  // NotebookForm({
+  //   Key? key,
+  //   required this.onNoteAdded,
+  //   this.initialContent,
+  // }) : super(key: key) {
+  //   if (initialContent != null) {
+  //     contentController.text = initialContent!;
+  //   }
+  // }
+
 
   @override
   Widget build(BuildContext context) {

@@ -7,6 +7,7 @@ import 'package:health_care_app/notebook/notebook_detail.dart';
 import 'package:health_care_app/services/repository.dart';
 import 'package:health_care_app/services/repository_impl.dart';
 import 'package:health_care_app/notebook/notebook_form.dart';
+import 'package:health_care_app/widgets/simple_button.dart';
 
 class MainNotebook extends StatefulWidget {
   const MainNotebook({super.key});
@@ -23,8 +24,7 @@ class _MainNotebookState extends State<MainNotebook> {
   @override
   void initState() {
     super.initState();
-    getNotes = repository
-        .getNotes(); // Pobranie notatek z bazy danych przy inicjalizacji widoku
+    getNotes = repository.getNotes();
   }
 
   @override
@@ -57,6 +57,7 @@ class _MainNotebookState extends State<MainNotebook> {
                         // TODO add a new note from chat
                         // String note = summary;
                         // print(note);
+                        // _showAddNoteDialog(context, summary);
                       },
                     ))),
           ),
@@ -96,28 +97,43 @@ class _MainNotebookState extends State<MainNotebook> {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: Text("Delete Note"),
-                          content:
-                              Text("Do you really want to delete this note?"),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  // Cofnij usuwanie notatki, nie usuwaj z listy
-                                });
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('Cancel'),
+                          title: const Text(
+                            "Delete Note",
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
                             ),
-                            TextButton(
-                              onPressed: () async {
-                                await repository.deleteNote(notes[index].id!);
-                                setState(() {
-                                  notes.removeAt(index);
-                                });
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('Delete'),
+                          ),
+                          content: const Text(
+                            "Do you really want to delete this note?",
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 17,
+                            ),
+                          ),
+                          actions: [
+                            Row(
+                              children: [
+                                SimpleButton(
+                                  title: 'Cancel',
+                                  onPressed: () {
+                                    setState(() {});
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                const SizedBox(width: 5),
+                                SimpleButton(
+                                  title: 'Delete' ,
+                                  onPressed: () async {
+                                    await repository.deleteNote(notes[index].id!);
+                                    setState(() {
+                                      notes.removeAt(index);
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
                             ),
                           ],
                         ),
