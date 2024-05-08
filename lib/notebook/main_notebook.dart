@@ -6,6 +6,7 @@ import 'package:health_care_app/notebook/insert_pdf_page.dart';
 import 'package:health_care_app/notebook/notebook_detail.dart';
 import 'package:health_care_app/services/repository.dart';
 import 'package:health_care_app/services/repository_impl.dart';
+import 'package:health_care_app/notebook/notebook_form.dart';
 
 class MainNotebook extends StatefulWidget {
   const MainNotebook({super.key});
@@ -42,6 +43,7 @@ class _MainNotebookState extends State<MainNotebook> {
             foregroundColor: Colors.white,
             onTap: () {
               //TODO: form
+              _showAddNoteDialog(context);
             },
           ),
           SpeedDialChild(
@@ -143,6 +145,24 @@ class _MainNotebookState extends State<MainNotebook> {
           }
         },
       ),
+    );
+  }
+
+  void _showAddNoteDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return NotebookForm(
+          onNoteAdded: (newNote) {
+            repository.addNote(newNote).then((_) {
+              setState(() {
+                getNotes = repository.getNotes();
+              });
+            });
+          },
+        );
+      },
     );
   }
 }

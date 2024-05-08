@@ -15,6 +15,7 @@ abstract class Repository {
   Future<void> deleteNotification(String id);
 
   // notebook
+  Future<Notebook>addNote(Notebook note);
   Future<List<Notebook>> getNotes();
 
 

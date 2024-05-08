@@ -70,14 +70,23 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Future<List<Notebook>> getNotes() async{
+  Future<Notebook> addNote(Notebook note) async {
+    DocumentReference documentReference = await _firestore
+        .collection(FirebasePaths.notes)
+        .add(note.toDTOMap(getUserId()));
+
+    DocumentSnapshot<Object?> documentSnapshot = await documentReference.get();
+
+    return Notebook.fromSnaphot(documentSnapshot);
+  }
+
+  @override
+  Future<List<Notebook>> getNotes() async {
     var querySnapshot = await _firestore
         .collection(FirebasePaths.notes)
         .where("userId", isEqualTo: getUserId())
         .get();
-    return querySnapshot.docs
-        .map((doc) => Notebook.fromSnaphot(doc))
-        .toList();
+    return querySnapshot.docs.map((doc) => Notebook.fromSnaphot(doc)).toList();
   }
 
   @override
