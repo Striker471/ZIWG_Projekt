@@ -9,6 +9,7 @@ import 'package:health_care_app/notebook/notebook_detail.dart';
 import 'package:health_care_app/services/repository.dart';
 import 'package:health_care_app/services/repository_impl.dart';
 import 'package:health_care_app/notebook/notebook_form.dart';
+import 'package:health_care_app/widgets/message.dart';
 import 'package:health_care_app/widgets/simple_button.dart';
 
 class MainNotebook extends StatefulWidget {
@@ -56,16 +57,21 @@ class _MainNotebookState extends State<MainNotebook> {
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => InsertPdfPage(
                       response: (summary) {
-                        Notebook newNote = Notebook(
-                            creationDate: DateTime.now().toString(),
-                            noteTitle: "Chat GPT Note",
-                            noteContent: summary.trim());
+                        if (summary != "") {
+                          Notebook newNote = Notebook(
+                              creationDate: DateTime.now().toString(),
+                              noteTitle: "Chat GPT Note",
+                              noteContent: summary.trim());
 
-                        repository.addNote(newNote).then((_) {
-                          setState(() {
-                            getNotes = repository.getNotes();
+                          repository.addNote(newNote).then((_) {
+                            setState(() {
+                              getNotes = repository.getNotes();
+                            });
                           });
-                        });
+                        } else {
+                          displayErrorMotionToast(
+                              'Failed to fetch response.', context);
+                        }
                       },
                     ))),
           ),
