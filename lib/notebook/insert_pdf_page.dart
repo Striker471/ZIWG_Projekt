@@ -20,12 +20,18 @@ class InsertPdfPage extends StatefulWidget {
 }
 
 class _InsertPdfPageState extends State<InsertPdfPage> {
+  bool isLoading = false;
+
   Future readPDF() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf'],
     );
     if (result != null) {
+      setState(() {
+        isLoading = true;
+      });
+
       PlatformFile file = result.files.first;
 
       final PdfDocument document =
@@ -36,12 +42,15 @@ class _InsertPdfPageState extends State<InsertPdfPage> {
 
       PdfTextExtractor extractor = PdfTextExtractor(document);
       String text = extractor.extractText(layoutText: true);
-
       String response = await fetchChatGPTResponse(text, context);
-      print(response);
 
-      // FIXME: work on example response it is pasted from real response
-      widget.response(expampleResponse);
+      setState(() {
+        isLoading = false;
+      });
+
+      Navigator.of(context).pop();
+
+      widget.response(response);
 
       document.dispose();
     } else {
@@ -78,11 +87,14 @@ class _InsertPdfPageState extends State<InsertPdfPage> {
                     'Attach PDF File',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
-                  SimpleButton(
-                    title: "Choose a file",
-                    onPressed: readPDF,
-                    width: 150,
-                  )
+                  if (!isLoading)
+                    SimpleButton(
+                      title: "Choose a file",
+                      onPressed: readPDF,
+                      width: 150,
+                    )
+                  else
+                    const CircularProgressIndicator()
                 ],
               ),
             )));

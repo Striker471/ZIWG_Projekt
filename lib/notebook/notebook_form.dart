@@ -6,26 +6,18 @@ class NotebookForm extends StatelessWidget {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
   final Function(Notebook) onNoteAdded;
-  
-  NotebookForm({super.key, required this.onNoteAdded});
-  // final String? initialContent;
-  
-  // NotebookForm({
-  //   Key? key,
-  //   required this.onNoteAdded,
-  //   this.initialContent,
-  // }) : super(key: key) {
-  //   if (initialContent != null) {
-  //     contentController.text = initialContent!;
-  //   }
-  // }
 
+  NotebookForm({super.key, required this.onNoteAdded});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Add New Note',
-      style: TextStyle(fontFamily: 'Poppins',fontWeight: FontWeight.bold, color: Colors.black),
+      title: const Text(
+        'Add New Note',
+        style: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.bold,
+            color: Colors.black),
       ),
       content: SingleChildScrollView(
         child: Column(
@@ -35,7 +27,10 @@ class NotebookForm extends StatelessWidget {
               controller: titleController,
               decoration: const InputDecoration(
                 labelText: 'Title',
-                labelStyle: TextStyle(fontFamily: 'Poppins',fontWeight: FontWeight.bold, color: Colors.black),
+                labelStyle: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
               ),
             ),
             const SizedBox(height: 16),
@@ -43,17 +38,22 @@ class NotebookForm extends StatelessWidget {
               controller: contentController,
               decoration: const InputDecoration(
                 labelText: 'Content',
-                labelStyle: TextStyle(fontFamily: 'Poppins',fontWeight: FontWeight.bold, color: Colors.black),
+                labelStyle: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
               ),
-              maxLines: 5, // Adjust the number of lines as needed
+              maxLines: 5,
             ),
           ],
         ),
       ),
       actions: <Widget>[
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SimpleButton(
+              width: 120,
               title: 'Cancel',
               onPressed: () {
                 Navigator.of(context).pop();
@@ -61,6 +61,7 @@ class NotebookForm extends StatelessWidget {
             ),
             const SizedBox(width: 5),
             SimpleButton(
+              width: 120,
               title: 'Add',
               onPressed: () {
                 _addNote(context);

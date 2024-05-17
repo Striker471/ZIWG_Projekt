@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:health_care_app/blank_scaffold.dart';
@@ -54,10 +56,16 @@ class _MainNotebookState extends State<MainNotebook> {
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => InsertPdfPage(
                       response: (summary) {
-                        // TODO add a new note from chat
-                        // String note = summary;
-                        // print(note);
-                        // _showAddNoteDialog(context, summary);
+                        Notebook newNote = Notebook(
+                            creationDate: DateTime.now().toString(),
+                            noteTitle: "Chat GPT Note",
+                            noteContent: summary.trim());
+
+                        repository.addNote(newNote).then((_) {
+                          setState(() {
+                            getNotes = repository.getNotes();
+                          });
+                        });
                       },
                     ))),
           ),
@@ -114,8 +122,10 @@ class _MainNotebookState extends State<MainNotebook> {
                           ),
                           actions: [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SimpleButton(
+                                  width: 120,
                                   title: 'Cancel',
                                   onPressed: () {
                                     setState(() {});
@@ -124,9 +134,11 @@ class _MainNotebookState extends State<MainNotebook> {
                                 ),
                                 const SizedBox(width: 5),
                                 SimpleButton(
-                                  title: 'Delete' ,
+                                  width: 120,
+                                  title: 'Delete',
                                   onPressed: () async {
-                                    await repository.deleteNote(notes[index].id!);
+                                    await repository
+                                        .deleteNote(notes[index].id!);
                                     setState(() {
                                       notes.removeAt(index);
                                     });

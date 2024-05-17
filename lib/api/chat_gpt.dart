@@ -86,6 +86,3 @@ Future<String> sendPrompt(String prompt, BuildContext context) async {
     return "";
   }
 }
-
-String expampleResponse =
-    "The patient, 56-year-old Pamela Rogers, presented with chest pain for the past week. The pain is dull and aching, located in the left para-sternal area, and radiates up to her neck. She had three episodes of pain in total, the most recent being 30 minutes long and prompting her visit to the Emergency Department. She has a history of hypertension but no other significant medical issues. On examination, she has normal vital signs and physical findings, including crackles in her lungs and a systolic murmur. Initial assessment indicates angina pectoris as the likely diagnosis, considering her risk factors. A detailed plan includes hospitalization for monitoring, starting medications, monitoring cholesterol levels, and scheduling a cardiac catheterization. She will also be started on diuretics for her dyspnea and further diagnostic tests will be ordered. The overall approach is to address the immediate symptoms and provide long-term care for her conditions.";
