@@ -16,7 +16,7 @@
 <p>
     With the HealthCare app, you can manage your health effectively and stay on top of your medical needs with ease. Whether it's finding the nearest hospital or setting a reminder for your medication, this app is your trusted partner in health management.
 </p>
-<table>
+<table align="center">
   <tr>
     <td align="center">
       <img src="assets/LoginScreenshot.png" alt="Login Screen" width="200">
